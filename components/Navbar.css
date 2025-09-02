@@ -1,0 +1,139 @@
+/* Navbar Base */
+.navbar {
+  background-color: #081226;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Container */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+}
+
+/* Logo */
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8b5cf6;
+  letter-spacing: 1px;
+  transition: transform 0.3s ease;
+}
+.logo:hover {
+  transform: scale(1.1) rotate(-2deg);
+}
+
+/* Desktop Menu */
+.desktop-menu {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+}
+.nav-link {
+  color: #e5e7eb;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.nav-link:hover {
+  color: #8b5cf6;
+}
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #8b5cf6;
+  border-radius: 2px;
+}
+
+/* Admin Button */
+.admin-btn {
+  background-color: #6366f1;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+.admin-btn:hover {
+  background-color: #4f46e5;
+  transform: scale(1.05);
+}
+
+/* Mobile Button */
+.mobile-btn {
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.mobile-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  background-color: #0a142d;
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideDown 0.4s ease forwards;
+}
+.mobile-link {
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.3rem;
+  border-radius: 0.5rem;
+  color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+.mobile-link:hover,
+.mobile-link.active {
+  background-color: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+}
+.mobile-admin-btn {
+  background-color: #8b5cf6;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+.mobile-admin-btn:hover {
+  background-color: #7c3aed;
+  transform: scale(1.05);
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .desktop-menu {
+    display: flex;
+  }
+  .mobile-btn {
+    display: none;
+  }
+  .mobile-menu {
+    display: none !important;
+  }
+}

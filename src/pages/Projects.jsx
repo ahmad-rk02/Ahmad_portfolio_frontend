@@ -1,4 +1,3 @@
-// Updated Projects.jsx (now shows main file prominently and additional files as small previews/links)
 import { useEffect, useState } from "react";
 import API from "../api";
 import { motion } from "framer-motion";
@@ -13,7 +12,8 @@ export default function Projects() {
   }, []);
 
   const getIcon = (ext) => {
-    if (["jpg", "jpeg", "png", "gif"].includes(ext)) return "🖼️";
+    if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) return "🖼️";
+    if (["mp4", "webm", "ogg"].includes(ext)) return "🎬";
     if (ext === "pdf") return "📄";
     if (ext === "zip") return "🗂️";
     if (["doc", "docx"].includes(ext)) return "📝";
@@ -26,17 +26,18 @@ export default function Projects() {
     if (ext === "zip") return "Download ZIP";
     if (["doc", "docx"].includes(ext)) return "Download Word";
     if (["xls", "xlsx"].includes(ext)) return "Download Excel";
+    if (["mp4", "webm", "ogg"].includes(ext)) return "Play Video";
     return `Download ${ext.toUpperCase()}`;
   };
 
   const renderMainFile = (file) => {
     if (!file) return null;
-    const url = file.startsWith("/") ? `http://localhost:5000${file}` : file;
+    const url = file; // Cloudinary full URL
     const ext = file.split(".").pop().toLowerCase();
-
     const icon = getIcon(ext);
 
-    if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
+    // Image
+    if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
       return (
         <div className="relative">
           <img src={url} alt="project file" className="w-full h-48 object-cover rounded-t-2xl" />
@@ -45,39 +46,87 @@ export default function Projects() {
           </span>
         </div>
       );
-    } else {
-      const label = getLabel(ext);
+    }
+
+    // Video
+    if (["mp4", "webm", "ogg"].includes(ext)) {
       return (
         <div className="relative">
-          <a
-            href={url}
-            target="_blank"
-            rel="noreferrer"
-            className="block w-full h-48 flex items-center justify-center bg-slate-800 text-white font-semibold rounded-t-2xl"
-          >
-            {label}
-          </a>
+          <video
+            src={url}
+            controls
+            className="w-full h-48 rounded-t-2xl bg-black object-cover"
+          />
           <span className="absolute top-2 right-2 bg-indigo-500 text-white text-sm px-2 py-1 rounded-lg shadow-md">
             {icon}
           </span>
         </div>
       );
     }
+
+    // PDF preview
+    if (ext === "pdf") {
+      return (
+        <div className="relative">
+          <iframe src={url} title="PDF Preview" className="w-full h-48 rounded-t-2xl bg-white"></iframe>
+          <span className="absolute top-2 right-2 bg-indigo-500 text-white text-sm px-2 py-1 rounded-lg shadow-md">
+            {icon}
+          </span>
+        </div>
+      );
+    }
+
+    // Other file types
+    const label = getLabel(ext);
+    return (
+      <div className="relative">
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          className="block w-full h-48 flex items-center justify-center bg-slate-800 text-white font-semibold rounded-t-2xl"
+        >
+          {label}
+        </a>
+        <span className="absolute top-2 right-2 bg-indigo-500 text-white text-sm px-2 py-1 rounded-lg shadow-md">
+          {icon}
+        </span>
+      </div>
+    );
   };
 
   const renderAdditionalFile = (file, idx) => {
-    const url = file.startsWith("/") ? `http://localhost:5000${file}` : file;
+    const url = file;
     const ext = file.split(".").pop().toLowerCase();
-    let bg = "bg-gray-600";
-    let label = ext.toUpperCase();
 
-    if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
+    // Small image preview
+    if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
       return (
-        <a key={idx} href={url} target="_blank" rel="noreferrer">
+        <a key={idx} href={url} target="_blank" rel="noreferrer" download>
           <img src={url} alt="" className="w-16 h-16 object-cover rounded shadow-md" />
         </a>
       );
     }
+
+    // Video thumbnail (just a "🎬" block for small preview)
+    if (["mp4", "webm", "ogg"].includes(ext)) {
+      return (
+        <a
+          key={idx}
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          download
+          className="w-16 h-16 flex items-center justify-center bg-black text-white text-xs font-semibold rounded shadow-md"
+        >
+          🎬
+        </a>
+      );
+    }
+
+    // Other file types (PDF, ZIP, DOC, XLS)
+    let bg = "bg-gray-600";
+    let label = ext.toUpperCase();
     if (ext === "pdf") {
       bg = "bg-red-600";
       label = "PDF";
@@ -98,6 +147,7 @@ export default function Projects() {
         href={url}
         target="_blank"
         rel="noreferrer"
+        download
         className={`w-16 h-16 flex items-center justify-center ${bg} text-white text-xs font-semibold rounded shadow-md`}
       >
         {label}
@@ -134,9 +184,7 @@ export default function Projects() {
               </h3>
               <p className="text-slate-300 mt-2 text-justify">{it.description}</p>
               {it.tech && (
-                <div className="text-sm text-slate-400 mt-2">
-                  {it.tech.join(" • ")}
-                </div>
+                <div className="text-sm text-slate-400 mt-2">{it.tech.join(" • ")}</div>
               )}
               {it.link && (
                 <a
@@ -156,6 +204,19 @@ export default function Projects() {
                 <div className="flex flex-wrap gap-2">
                   {it.files.slice(1).map((f, idx) => renderAdditionalFile(f, idx))}
                 </div>
+              </div>
+            )}
+
+            {/* Download All Button */}
+            {it.files?.length > 0 && (
+              <div className="px-6 pb-6">
+                <a
+                  href={it.files[0]}
+                  download
+                  className="mt-4 inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg"
+                >
+                  ⬇ Download Main File
+                </a>
               </div>
             )}
           </motion.article>

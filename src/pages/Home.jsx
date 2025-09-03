@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { motion } from "framer-motion";
-import API from "../api"; 
+import API from "../api";
 export default function Home() {
   const [profile, setProfile] = useState(null);
 
@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <section className="relative bg-[#0a142d] min-h-screen flex items-center justify-center px-6 lg:px-12">
       <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 max-w-5xl w-full">
-        
+
         {/* Left Section - Text */}
         <div className="flex-1 text-center lg:text-left">
           <p className="text-indigo-400 font-semibold mb-3 tracking-wide">Hello, I am</p>
@@ -64,9 +64,9 @@ export default function Home() {
         <div className="flex-1 flex justify-center items-center">
           {profile?.avatar && (
             <motion.img
-              src={`http://localhost:5000${profile.avatar}`}
+              src={profile.avatar}
               alt="Avatar"
-              className="rounded-full w-56 h-56 object-cover shadow-2xl border-4 border-indigo-600"
+              className="rounded-full w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 object-cover shadow-2xl border-4 border-indigo-600"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 260, damping: 20 }}

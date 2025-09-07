@@ -1,10 +1,9 @@
-
 import axios from "axios";
-
-const base = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
-
+  console.log("Base URL:", import.meta.env.VITE_API_BASE);
 const API = axios.create({
-  baseURL: base,
+
+  baseURL: import.meta.env.VITE_API_BASE
+
 });
 
 API.interceptors.request.use((req) => {

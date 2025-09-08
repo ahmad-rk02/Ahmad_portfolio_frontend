@@ -3,19 +3,27 @@ import { Typewriter } from "react-simple-typewriter";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { motion } from "framer-motion";
 import API from "../api";
+
 export default function Home() {
   const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     API.get("/profile")
-      .then(res => setProfile(res.data))
-      .catch(() => setProfile(null));
+      .then(res => {
+        setProfile(res.data);
+        setError(null);
+      })
+      .catch(err => {
+        console.error("Error fetching profile:", err.response?.data || err.message);
+        setError("Failed to load profile. Please try again later.");
+        setProfile(null);
+      });
   }, []);
 
   return (
     <section className="relative bg-[#0a142d] min-h-screen flex items-center justify-center px-6 lg:px-12">
       <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 max-w-5xl w-full">
-
         {/* Left Section - Text */}
         <div className="flex-1 text-center lg:text-left">
           <p className="text-indigo-400 font-semibold mb-3 tracking-wide">Hello, I am</p>
@@ -38,6 +46,8 @@ export default function Home() {
           <p className="mt-6 text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0 text-justify">
             {profile?.summary || "Short profile summary — what you do, main tech, and what you love building."}
           </p>
+
+          {error && <p className="mt-4 text-red-500">{error}</p>}
 
           <div className="mt-6 flex flex-wrap justify-center lg:justify-start gap-4 items-center">
             <a
@@ -76,6 +86,5 @@ export default function Home() {
         </div>
       </div>
     </section>
-
   );
 }

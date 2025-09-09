@@ -10,11 +10,11 @@ export default function Home() {
 
   useEffect(() => {
     API.get("/profile")
-      .then(res => {
+      .then((res) => {
         setProfile(res.data);
         setError(null);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Error fetching profile:", err.response?.data || err.message);
         setError("Failed to load profile. Please try again later.");
         setProfile(null);
@@ -22,12 +22,30 @@ export default function Home() {
   }, []);
 
   return (
-    <section className="relative bg-[#0a142d] min-h-screen flex items-center justify-center px-6 lg:px-12">
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 max-w-5xl w-full">
-        {/* Left Section - Text */}
-        <div className="flex-1 text-center lg:text-left">
-          <p className="text-indigo-400 font-semibold mb-3 tracking-wide">Hello, I am</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-white leading-tight">
+    <section className="relative bg-[#0a142d] min-h-screen flex items-center justify-center px-6 lg:px-12 py-12">
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-16 max-w-6xl w-full">
+        
+        {/* Avatar - show first on mobile */}
+        <div className="flex-1 flex justify-center items-center order-1 lg:order-2">
+          {profile?.avatar && (
+            <motion.img
+              src={profile.avatar}
+              alt="Avatar"
+              className="rounded-full w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 object-cover shadow-2xl border-4 border-indigo-600"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              whileHover={{ scale: 1.05, rotate: 3 }}
+            />
+          )}
+        </div>
+
+        {/* Text Section */}
+        <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
+          <p className="text-indigo-400 font-semibold mb-3 tracking-wide">
+            Hello, I am
+          </p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
             {profile?.name || "Your Name"}
           </h1>
 
@@ -44,12 +62,14 @@ export default function Home() {
           </h2>
 
           <p className="mt-6 text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0 text-justify">
-            {profile?.summary || "Short profile summary — what you do, main tech, and what you love building."}
+            {profile?.summary ||
+              "Short profile summary — what you do, main tech, and what you love building."}
           </p>
 
           {error && <p className="mt-4 text-red-500">{error}</p>}
 
-          <div className="mt-6 flex flex-wrap justify-center lg:justify-start gap-4 items-center">
+          {/* Buttons + Socials */}
+          <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-4 items-center">
             <a
               href="/projects"
               className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition transform hover:-translate-y-1 hover:shadow-lg"
@@ -58,31 +78,28 @@ export default function Home() {
             </a>
 
             {profile?.socials?.linkedin && (
-              <a href={profile.socials.linkedin} target="_blank" rel="noreferrer" className="text-blue-500 text-2xl hover:text-blue-400" title="LinkedIn">
+              <a
+                href={profile.socials.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xl transition"
+                title="LinkedIn"
+              >
                 <FaLinkedin />
               </a>
             )}
             {profile?.socials?.github && (
-              <a href={profile.socials.github} target="_blank" rel="noreferrer" className="text-gray-400 text-2xl hover:text-gray-200" title="GitHub">
+              <a
+                href={profile.socials.github}
+                target="_blank"
+                rel="noreferrer"
+                className="p-3 rounded-full bg-gray-700 hover:bg-gray-800 text-white text-xl transition"
+                title="GitHub"
+              >
                 <FaGithub />
               </a>
             )}
           </div>
-        </div>
-
-        {/* Right Section - Avatar */}
-        <div className="flex-1 flex justify-center items-center">
-          {profile?.avatar && (
-            <motion.img
-              src={profile.avatar}
-              alt="Avatar"
-              className="rounded-full w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 object-cover shadow-2xl border-4 border-indigo-600"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              whileHover={{ scale: 1.05, rotate: 3 }}
-            />
-          )}
         </div>
       </div>
     </section>

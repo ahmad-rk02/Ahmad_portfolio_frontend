@@ -2,8 +2,36 @@ import { motion } from "framer-motion";
 import { FaBriefcase, FaCode, FaTrophy, FaGraduationCap } from "react-icons/fa";
 
 export default function AboutSection({ profile, stats }) {
+    // Helper function to parse DD/MM/YY or DD/MM/YYYY format
+    const parseDate = (dateStr) => {
+        if (!dateStr) return null;
+
+        // Check if it's "Present" or similar
+        if (typeof dateStr === 'string' && (dateStr.toLowerCase().includes('present') || dateStr.toLowerCase().includes('current'))) {
+            return new Date();
+        }
+
+        // Try to parse DD/MM/YY or DD/MM/YYYY format
+        const parts = String(dateStr).split('/');
+        if (parts.length === 3) {
+            let day = parseInt(parts[0]);
+            let month = parseInt(parts[1]) - 1; // Month is 0-indexed
+            let year = parseInt(parts[2]);
+
+            // Handle 2-digit year (YY format)
+            if (year < 100) {
+                year += 2000;
+            }
+
+            return new Date(year, month, day);
+        }
+
+        // Fallback to default Date parsing
+        return new Date(dateStr);
+    };
+
     // Calculate longest single experience from all experience entries
-    const calculateTotalExperience = () => {
+    const calculateLongestExperience = () => {
         if (!stats.experience || stats.experience.length === 0) {
             return profile?.experienceMonths || 6;
         }
@@ -11,36 +39,25 @@ export default function AboutSection({ profile, stats }) {
         let longestMonths = 0;
 
         stats.experience.forEach(exp => {
-            console.log('Processing experience:', exp.role || exp.title, 'Start:', exp.startDate, 'End:', exp.endDate);
+            const startDate = parseDate(exp.startDate);
+            const endDate = parseDate(exp.endDate);
 
-            const startDate = new Date(exp.startDate);
-            const endDate = exp.endDate && exp.endDate.toLowerCase() !== 'present'
-                ? new Date(exp.endDate)
-                : new Date();
-
-            console.log('Parsed dates - Start:', startDate, 'End:', endDate);
-
-            if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime()) && endDate >= startDate) {
+            if (startDate && endDate && !isNaN(startDate.getTime()) && !isNaN(endDate.getTime()) && endDate >= startDate) {
                 const months = (endDate.getFullYear() - startDate.getFullYear()) * 12
                     + (endDate.getMonth() - startDate.getMonth());
                 const validMonths = Math.max(0, months);
-
-                console.log('Calculated months:', validMonths);
 
                 // Keep track of the longest single experience
                 if (validMonths > longestMonths) {
                     longestMonths = validMonths;
                 }
-            } else {
-                console.log('Invalid dates detected');
             }
         });
 
-        console.log('Longest experience in months:', longestMonths);
         return longestMonths || profile?.experienceMonths || 6;
     };
 
-    const totalMonths = calculateTotalExperience();
+    const totalMonths = calculateLongestExperience();
     const years = Math.floor(totalMonths / 12);
     const months = totalMonths % 12;
 

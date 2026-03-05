@@ -38,7 +38,7 @@ export default function AboutSection({ profile, stats }) {
                             <div className="border-l-4 border-slate-900 dark:border-white pl-4">
                                 <FaBriefcase className="text-2xl text-slate-900 dark:text-white mb-3" />
                                 <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-                                    6+
+                                    {profile?.experienceMonths || 6}+
                                 </div>
                                 <div className="text-slate-600 dark:text-slate-400">Months Experience</div>
                             </div>

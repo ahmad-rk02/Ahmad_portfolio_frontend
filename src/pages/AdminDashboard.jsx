@@ -61,6 +61,7 @@ export default function AdminDashboard() {
         fdProfile.append("title", form.title || "");
         fdProfile.append("summary", form.summary || "");
         fdProfile.append("website", form.website || "");
+        fdProfile.append("experienceMonths", form.experienceMonths || 0);
         fdProfile.append("socials[linkedin]", form.socials?.linkedin || "");
         fdProfile.append("socials[github]", form.socials?.github || "");
         if (form.imageFile) fdProfile.append("avatarFile", form.imageFile);
@@ -95,6 +96,8 @@ export default function AdminDashboard() {
               value={form.summary || ""} onChange={e => setForm({ ...form, summary: e.target.value })} />
             <input className={inputClass} placeholder="Website"
               value={form.website || ""} onChange={e => setForm({ ...form, website: e.target.value })} />
+            <input className={inputClass} type="number" placeholder="Experience (in months)"
+              value={form.experienceMonths || ""} onChange={e => setForm({ ...form, experienceMonths: parseInt(e.target.value || 0) })} />
             <input className={inputClass} placeholder="LinkedIn"
               value={form.socials?.linkedin || ""} onChange={e => setForm({ ...form, socials: { ...form.socials, linkedin: e.target.value } })} />
             <input className={inputClass} placeholder="GitHub"

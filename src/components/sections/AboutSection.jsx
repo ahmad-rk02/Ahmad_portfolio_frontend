@@ -2,6 +2,53 @@ import { motion } from "framer-motion";
 import { FaBriefcase, FaCode, FaTrophy, FaGraduationCap } from "react-icons/fa";
 
 export default function AboutSection({ profile, stats }) {
+    // Calculate total experience from all experience entries
+    const calculateTotalExperience = () => {
+        if (!stats.experience || stats.experience.length === 0) {
+            return profile?.experienceMonths || 6;
+        }
+
+        let totalMonths = 0;
+
+        stats.experience.forEach(exp => {
+            const startDate = new Date(exp.startDate);
+            const endDate = exp.endDate && exp.endDate.toLowerCase() !== 'present'
+                ? new Date(exp.endDate)
+                : new Date();
+
+            if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+                const months = (endDate.getFullYear() - startDate.getFullYear()) * 12
+                    + (endDate.getMonth() - startDate.getMonth());
+                totalMonths += Math.max(0, months);
+            }
+        });
+
+        return totalMonths || profile?.experienceMonths || 6;
+    };
+
+    const totalMonths = calculateTotalExperience();
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    // Format experience display
+    const experienceDisplay = () => {
+        if (years > 0 && months > 0) {
+            return `${years}+ Years`;
+        } else if (years > 0) {
+            return `${years}+ Years`;
+        } else {
+            return `${months}+ Months`;
+        }
+    };
+
+    const experienceLabel = () => {
+        if (years > 0) {
+            return "Years Experience";
+        } else {
+            return "Months Experience";
+        }
+    };
+
     return (
         <section id="about" className="py-20 bg-slate-50 dark:bg-slate-900">
             <div className="container mx-auto px-6 lg:px-20">
@@ -38,9 +85,9 @@ export default function AboutSection({ profile, stats }) {
                             <div className="border-l-4 border-slate-900 dark:border-white pl-4">
                                 <FaBriefcase className="text-2xl text-slate-900 dark:text-white mb-3" />
                                 <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-                                    {profile?.experienceMonths || 6}+
+                                    {experienceDisplay()}
                                 </div>
-                                <div className="text-slate-600 dark:text-slate-400">Months Experience</div>
+                                <div className="text-slate-600 dark:text-slate-400">{experienceLabel()}</div>
                             </div>
                             <div className="border-l-4 border-slate-900 dark:border-white pl-4">
                                 <FaCode className="text-2xl text-slate-900 dark:text-white mb-3" />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import API from "../api";
 
 export default function AdminLogin() {
@@ -77,18 +78,28 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a142d] via-[#081226] to-[#050c1a] px-4">
-      <div className="w-full max-w-md bg-[#071228] p-8 rounded-2xl shadow-2xl border border-slate-800">
-        <h2 className="text-3xl font-extrabold text-center text-indigo-400 mb-6">
+    <div className="flex-1 flex items-center justify-center bg-white dark:bg-slate-950 px-4 py-12">
+      <motion.div
+        className="w-full max-w-md bg-white dark:bg-slate-900 p-10 border border-slate-200 dark:border-slate-800"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.h2
+          className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
           Admin Login
-        </h2>
+        </motion.h2>
 
         {step === "credentials" ? (
           <form onSubmit={submitCredentials} className="space-y-5">
             <div>
-              <label className="block text-slate-300 mb-1 text-sm">Email</label>
+              <label className="block text-slate-900 dark:text-white mb-2 text-sm font-mono">Email</label>
               <input
-                className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-slate-900 dark:focus:ring-white focus:border-slate-900 dark:focus:border-white outline-none transition-all"
                 placeholder="Enter email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -97,9 +108,9 @@ export default function AdminLogin() {
             </div>
 
             <div className="relative">
-              <label className="block text-slate-300 mb-1 text-sm">Password</label>
+              <label className="block text-slate-900 dark:text-white mb-2 text-sm font-mono">Password</label>
               <input
-                className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-slate-900 dark:focus:ring-white focus:border-slate-900 dark:focus:border-white outline-none transition-all"
                 placeholder="Enter password"
                 type={showPassword ? "text" : "password"}
                 value={form.password}
@@ -108,7 +119,7 @@ export default function AdminLogin() {
               />
               <button
                 type="button"
-                className="absolute right-3 top-9 text-slate-400 hover:text-slate-200"
+                className="absolute right-4 top-10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-mono"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}
@@ -116,7 +127,7 @@ export default function AdminLogin() {
             </div>
 
             <button
-              className="w-full bg-indigo-600 hover:bg-indigo-700 transition px-4 py-2 rounded-lg font-semibold text-white shadow-lg"
+              className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 transition-all px-4 py-3 font-mono text-sm"
               type="submit"
               disabled={loading}
             >
@@ -125,7 +136,7 @@ export default function AdminLogin() {
 
             <button
               type="button"
-              className="w-full text-indigo-400 hover:text-indigo-300 text-sm mt-2"
+              className="w-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm mt-3 font-mono"
               onClick={() => setStep("forgot")}
             >
               Forgot Password?
@@ -134,10 +145,11 @@ export default function AdminLogin() {
         ) : step === "otp" ? (
           <form onSubmit={submitOTP} className="space-y-5">
             <div>
-              <label className="block text-slate-300 mb-1 text-sm">OTP</label>
+              <label className="block text-slate-900 dark:text-white mb-2 text-sm font-mono">OTP Code</label>
               <input
-                className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
-                placeholder="Enter 6-digit OTP"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-slate-900 dark:focus:ring-white focus:border-slate-900 dark:focus:border-white outline-none transition-all text-center text-2xl tracking-widest font-mono"
+                placeholder="000000"
+                maxLength="6"
                 value={form.otp}
                 onChange={(e) => setForm({ ...form, otp: e.target.value })}
                 required
@@ -145,7 +157,7 @@ export default function AdminLogin() {
             </div>
 
             <button
-              className="w-full bg-indigo-600 hover:bg-indigo-700 transition px-4 py-2 rounded-lg font-semibold text-white shadow-lg"
+              className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 transition-all px-4 py-3 font-mono text-sm"
               type="submit"
               disabled={loading}
             >
@@ -155,9 +167,9 @@ export default function AdminLogin() {
         ) : step === "forgot" ? (
           <form onSubmit={submitForgotPassword} className="space-y-5">
             <div>
-              <label className="block text-slate-300 mb-1 text-sm">Email</label>
+              <label className="block text-slate-900 dark:text-white mb-2 text-sm font-mono">Email</label>
               <input
-                className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-slate-900 dark:focus:ring-white focus:border-slate-900 dark:focus:border-white outline-none transition-all"
                 placeholder="Enter registered email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -166,7 +178,7 @@ export default function AdminLogin() {
             </div>
 
             <button
-              className="w-full bg-indigo-600 hover:bg-indigo-700 transition px-4 py-2 rounded-lg font-semibold text-white shadow-lg"
+              className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 transition-all px-4 py-3 font-mono text-sm"
               type="submit"
               disabled={loading}
             >
@@ -175,19 +187,20 @@ export default function AdminLogin() {
 
             <button
               type="button"
-              className="w-full text-indigo-400 hover:text-indigo-300 text-sm mt-2"
+              className="w-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm mt-3 font-mono"
               onClick={() => setStep("credentials")}
             >
-              Back to Login
+              ← Back to Login
             </button>
           </form>
         ) : (
           <form onSubmit={submitResetPassword} className="space-y-5">
             <div>
-              <label className="block text-slate-300 mb-1 text-sm">OTP</label>
+              <label className="block text-slate-900 dark:text-white mb-2 text-sm font-mono">OTP Code</label>
               <input
-                className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
-                placeholder="Enter 6-digit OTP"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-slate-900 dark:focus:ring-white focus:border-slate-900 dark:focus:border-white outline-none transition-all text-center text-2xl tracking-widest font-mono"
+                placeholder="000000"
+                maxLength="6"
                 value={form.otp}
                 onChange={(e) => setForm({ ...form, otp: e.target.value })}
                 required
@@ -195,9 +208,9 @@ export default function AdminLogin() {
             </div>
 
             <div className="relative">
-              <label className="block text-slate-300 mb-1 text-sm">New Password</label>
+              <label className="block text-slate-900 dark:text-white mb-2 text-sm font-mono">New Password</label>
               <input
-                className="w-full rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-slate-900 dark:focus:ring-white focus:border-slate-900 dark:focus:border-white outline-none transition-all"
                 placeholder="Enter new password"
                 type={showPassword ? "text" : "password"}
                 value={form.newPassword}
@@ -206,7 +219,7 @@ export default function AdminLogin() {
               />
               <button
                 type="button"
-                className="absolute right-3 top-9 text-slate-400 hover:text-slate-200"
+                className="absolute right-4 top-10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-mono"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}
@@ -214,7 +227,7 @@ export default function AdminLogin() {
             </div>
 
             <button
-              className="w-full bg-indigo-600 hover:bg-indigo-700 transition px-4 py-2 rounded-lg font-semibold text-white shadow-lg"
+              className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 transition-all px-4 py-3 font-mono text-sm"
               type="submit"
               disabled={loading}
             >
@@ -223,14 +236,14 @@ export default function AdminLogin() {
 
             <button
               type="button"
-              className="w-full text-indigo-400 hover:text-indigo-300 text-sm mt-2"
+              className="w-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm mt-3 font-mono"
               onClick={() => setStep("credentials")}
             >
-              Back to Login
+              ← Back to Login
             </button>
           </form>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

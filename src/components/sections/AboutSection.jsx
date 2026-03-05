@@ -1,0 +1,72 @@
+import { motion } from "framer-motion";
+import { FaBriefcase, FaCode, FaTrophy, FaGraduationCap } from "react-icons/fa";
+
+export default function AboutSection({ profile, stats }) {
+    return (
+        <section id="about" className="py-20 bg-slate-50 dark:bg-slate-900">
+            <div className="container mx-auto px-6 lg:px-20">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-12">
+                        About Me
+                    </h2>
+
+                    <div className="grid md:grid-cols-2 gap-12">
+                        <div className="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed text-justify">
+                            <p>
+                                Hello! I'm a passionate software developer with a strong focus on creating
+                                efficient, scalable, and user-friendly applications. My journey in web
+                                development started several years ago, and I've been fortunate to work on
+                                diverse projects that have shaped my skills.
+                            </p>
+                            <p>
+                                I specialize in full-stack development, with expertise in modern JavaScript
+                                frameworks and backend technologies. I'm always eager to learn new technologies
+                                and best practices to deliver high-quality solutions.
+                            </p>
+                            <p>
+                                When I'm not coding, you can find me contributing to open-source projects,
+                                writing technical articles, or exploring new technologies.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-6">
+                            <div className="border-l-4 border-slate-900 dark:border-white pl-4">
+                                <FaBriefcase className="text-2xl text-slate-900 dark:text-white mb-3" />
+                                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
+                                    6+
+                                </div>
+                                <div className="text-slate-600 dark:text-slate-400">Months Experience</div>
+                            </div>
+                            <div className="border-l-4 border-slate-900 dark:border-white pl-4">
+                                <FaCode className="text-2xl text-slate-900 dark:text-white mb-3" />
+                                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
+                                    {stats.projects.length}+
+                                </div>
+                                <div className="text-slate-600 dark:text-slate-400">Projects Completed</div>
+                            </div>
+                            <div className="border-l-4 border-slate-900 dark:border-white pl-4">
+                                <FaGraduationCap className="text-2xl text-slate-900 dark:text-white mb-3" />
+                                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
+                                    {stats.skills.length}+
+                                </div>
+                                <div className="text-slate-600 dark:text-slate-400">Technologies</div>
+                            </div>
+                            <div className="border-l-4 border-slate-900 dark:border-white pl-4">
+                                <FaTrophy className="text-2xl text-slate-900 dark:text-white mb-3" />
+                                <div className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
+                                    {stats.achievements.length}+
+                                </div>
+                                <div className="text-slate-600 dark:text-slate-400">Achievements</div>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+        </section>
+    );
+}

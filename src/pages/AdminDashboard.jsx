@@ -1,7 +1,6 @@
-// Updated AdminDashboard.jsx (no major changes needed, but enhancing file previews for more types)
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, Edit2, Trash2 } from "lucide-react";
+import { FiLogOut, FiEdit2, FiTrash2 } from "react-icons/fi";
 import API from "../api";
 
 const sections = ["profile", "experience", "education", "skills", "projects", "achievements"];
@@ -81,7 +80,7 @@ export default function AdminDashboard() {
   };
 
   const inputClass =
-    "w-full rounded-lg bg-slate-800/80 border border-slate-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 px-3 py-2 text-sm text-slate-200 placeholder-slate-400 outline-none transition";
+    "w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 focus:border-slate-900 dark:focus:border-white focus:ring-1 focus:ring-slate-900 dark:focus:ring-white px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none transition-all";
 
   function renderForm() {
     switch (section) {
@@ -101,7 +100,7 @@ export default function AdminDashboard() {
             <input className={inputClass} placeholder="GitHub"
               value={form.socials?.github || ""} onChange={e => setForm({ ...form, socials: { ...form.socials, github: e.target.value } })} />
             <input type="file"
-              className="w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500"
+              className="w-full text-sm text-slate-600 dark:text-slate-400 file:mr-4 file:py-3 file:px-4 file:border-0 file:text-sm file:bg-slate-900 dark:file:bg-white file:text-white dark:file:text-slate-900 hover:file:bg-slate-800 dark:hover:file:bg-slate-100 file:transition-all cursor-pointer"
               onChange={e => setForm({ ...form, imageFile: e.target.files[0] })} />
           </>
         );
@@ -168,7 +167,7 @@ export default function AdminDashboard() {
               onChange={e => setForm({ ...form, tech: e.target.value.split(",").map(s => s.trim()) })} />
             <input type="file"
               multiple
-              className="w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500"
+              className="w-full text-sm text-slate-600 dark:text-slate-400 file:mr-4 file:py-3 file:px-4 file:border-0 file:text-sm file:bg-slate-900 dark:file:bg-white file:text-white dark:file:text-slate-900 hover:file:bg-slate-800 dark:hover:file:bg-slate-100 file:transition-all cursor-pointer"
               onChange={e => setForm({ ...form, files: Array.from(e.target.files) })} />
           </>
         );
@@ -201,7 +200,7 @@ export default function AdminDashboard() {
     let label = "File";
 
     if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
-      return <img key={idx} src={url} alt="preview" className="w-20 h-20 object-cover rounded-md shadow-md" />;
+      return <img key={idx} src={url} alt="preview" className="w-20 h-20 object-cover border border-slate-300 dark:border-slate-700" />;
     }
     if (ext === "pdf") {
       bg = "bg-red-700";
@@ -223,7 +222,7 @@ export default function AdminDashboard() {
         href={url}
         target="_blank"
         rel="noreferrer"
-        className={`w-20 h-20 flex items-center justify-center ${bg} text-white text-xs font-semibold rounded-md shadow-md`}
+        className={`w-20 h-20 flex items-center justify-center ${bg} text-white text-xs font-semibold`}
       >
         {label}
       </a>
@@ -231,128 +230,176 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white py-6 px-4 sm:px-6 lg:px-8">
-      {/* Section Tabs */}
-      <motion.div
-        className="flex flex-wrap gap-2 items-center mb-6"
-        initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-      >
-        {sections.map(s => (
-          <button
-            key={s}
-            onClick={() => { setSection(s); setForm({}); setEditing(null); }}
-            className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 ${s === section ? "bg-indigo-600 shadow-lg scale-105" : "bg-slate-700 hover:bg-slate-600"
-              }`}
-          >
-            {s}
-          </button>
-        ))}
-        <button
-          onClick={() => { localStorage.removeItem("token"); window.location.href = "/admin/login"; }}
-          className="ml-auto px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 flex items-center gap-2"
-        >
-          <LogOut size={18} /> Logout
-        </button>
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Form */}
-        <motion.form
-          onSubmit={onSubmit}
-          className="space-y-3 bg-slate-900/60 p-6 rounded-2xl shadow-lg backdrop-blur-md border border-slate-700"
-          initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}
-        >
-          <h3 className="text-lg font-bold text-indigo-400 mb-3">
-            {editing ? "Edit item" : "Create item"} — {section}
-          </h3>
-          {renderForm()}
-          <div className="flex gap-3 pt-2">
+    <div className="flex-1 bg-slate-50 dark:bg-slate-900">
+      {/* Header Section */}
+      <div className="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
+              <p className="text-sm text-slate-600 dark:text-slate-400 font-mono mt-1">
+                Manage your portfolio content
+              </p>
+            </div>
             <button
-              className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition font-semibold"
-              type="submit"
-              disabled={loading}
+              onClick={() => { localStorage.removeItem("token"); window.location.href = "/"; }}
+              className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 transition-all font-mono text-sm"
             >
-              {loading ? "Saving..." : editing ? "Save" : "Add"}
-            </button>
-            <button
-              type="button"
-              onClick={() => { setForm({}); setEditing(null); }}
-              className="px-5 py-2 rounded-lg bg-slate-700 hover:bg-slate-600"
-            >
-              Clear
+              <FiLogOut size={16} /> Logout
             </button>
           </div>
-        </motion.form>
+        </div>
+      </div>
 
-        {/* Existing items */}
-        <motion.div
-          className="overflow-y-auto max-h-80 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800 hover:scrollbar-thumb-slate-500 bg-slate-900/60 p-6 rounded-2xl shadow-lg border border-slate-700"
-          initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }}
-        >
-          <h3 className="text-lg font-bold mb-4 text-indigo-400">Existing items</h3>
-          <AnimatePresence>
-            {items.map(it => (
-              <motion.div
-                key={it._id}
-                className="bg-slate-800 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+      {/* Section Tabs */}
+      <div className="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex overflow-x-auto gap-1 py-2">
+            {sections.map(s => (
+              <button
+                key={s}
+                onClick={() => { setSection(s); setForm({}); setEditing(null); }}
+                className={`px-4 py-2.5 font-mono text-sm whitespace-nowrap transition-all ${s === section
+                  ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                  }`}
               >
-                <div className="flex-1">
-                  <div className="font-semibold">{it.title || it.role || it.name || it.degree}</div>
-                  <div className="text-sm text-slate-400">{it.company || it.institution || it.issuer || ""}</div>
+                {s.charAt(0).toUpperCase() + s.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-                  {/* Preview files */}
-                  {it.files && it.files.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {it.files.map((f, idx) => renderPreview(f, idx))}
-                    </div>
-                  )}
-                </div>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Form Section - Takes 1 column */}
+          <motion.div
+            className="lg:col-span-1"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-6 sticky top-4">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                  {editing ? "Edit" : "Create"} {section}
+                </h3>
+                {editing && (
+                  <span className="text-xs px-2 py-1 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-mono">
+                    EDITING
+                  </span>
+                )}
+              </div>
 
-                <div className="flex gap-2 mt-2 sm:mt-0">
+              <form onSubmit={onSubmit} className="space-y-4">
+                {renderForm()}
+
+                <div className="flex gap-2 pt-4 border-t border-slate-200 dark:border-slate-800">
                   <button
-                    onClick={() => onEdit(it)}
-                    className="px-3 py-1 rounded bg-yellow-500 text-black flex items-center gap-1"
+                    className="flex-1 px-4 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 transition-all font-mono text-sm disabled:opacity-50"
+                    type="submit"
+                    disabled={loading}
                   >
-                    <Edit2 size={16} /> Edit
+                    {loading ? "Saving..." : editing ? "Update" : "Add"}
                   </button>
-                  {section !== "profile" && (
+                  {editing && (
                     <button
-                      onClick={() => onDelete(it._id)}
-                      className="px-3 py-1 rounded bg-red-600 text-white flex items-center gap-1"
+                      type="button"
+                      onClick={() => { setForm({}); setEditing(null); }}
+                      className="px-4 py-2.5 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-900 dark:hover:border-white transition-all font-mono text-sm"
                     >
-                      <Trash2 size={16} /> Delete
+                      Cancel
                     </button>
                   )}
                 </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+              </form>
+            </div>
+          </motion.div>
+
+          {/* Items List - Takes 2 columns */}
+          <motion.div
+            className="lg:col-span-2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                  Existing Items
+                </h3>
+                <span className="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono">
+                  {items.length} {items.length === 1 ? 'item' : 'items'}
+                </span>
+              </div>
+
+              <div className="space-y-3 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
+                <AnimatePresence>
+                  {items.length === 0 ? (
+                    <div className="text-center py-12 text-slate-400 dark:text-slate-600 font-mono text-sm">
+                      No items yet. Create one to get started.
+                    </div>
+                  ) : (
+                    items.map(it => (
+                      <motion.div
+                        key={it._id}
+                        className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 hover:border-slate-900 dark:hover:border-white transition-all"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, height: 0 }}
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-slate-900 dark:text-white truncate">
+                              {it.title || it.role || it.name || it.degree}
+                            </h4>
+                            {(it.company || it.institution || it.issuer) && (
+                              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                                {it.company || it.institution || it.issuer}
+                              </p>
+                            )}
+                            {it.description && (
+                              <p className="text-sm text-slate-500 dark:text-slate-500 mt-2 line-clamp-2">
+                                {it.description}
+                              </p>
+                            )}
+
+                            {/* File Previews */}
+                            {it.files && it.files.length > 0 && (
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                {it.files.map((f, idx) => renderPreview(f, idx))}
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="flex gap-2 flex-shrink-0">
+                            <button
+                              onClick={() => onEdit(it)}
+                              className="p-2 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-900 dark:hover:border-white transition-all"
+                              title="Edit"
+                            >
+                              <FiEdit2 size={16} />
+                            </button>
+                            {section !== "profile" && (
+                              <button
+                                onClick={() => onDelete(it._id)}
+                                className="p-2 border border-red-300 dark:border-red-900 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all"
+                                title="Delete"
+                              >
+                                <FiTrash2 size={16} />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
-
-      {/* Preview Panel */}
-      <motion.div
-        className="mt-8 bg-slate-900/60 p-6 rounded-2xl shadow-lg border border-slate-700"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-      >
-        <h4 className="font-bold mb-3 text-indigo-400">Preview</h4>
-        <pre className="whitespace-pre-wrap text-slate-300 text-sm">{JSON.stringify(form, null, 2)}</pre>
-
-        {form.imageFile && (
-          <img alt="" src={URL.createObjectURL(form.imageFile)} className="mt-4 rounded-md w-full max-w-sm object-cover shadow-md" />
-        )}
-
-        {form.files && form.files.map((f, idx) => (
-          <div key={idx} className="mt-2">
-            {["jpg","jpeg","png","gif"].includes(f.name?.split(".").pop().toLowerCase()) ? (
-              <img src={URL.createObjectURL(f)} className="rounded-md w-32 h-32 object-cover shadow-md" alt="" />
-            ) : (
-              <span className="inline-block px-3 py-2 bg-indigo-600 text-white rounded-md shadow-md text-xs">{f.name}</span>
-            )}
-          </div>
-        ))}
-      </motion.div>
     </div>
   );
 }

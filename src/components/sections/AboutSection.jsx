@@ -11,23 +11,32 @@ export default function AboutSection({ profile, stats }) {
         let longestMonths = 0;
 
         stats.experience.forEach(exp => {
+            console.log('Processing experience:', exp.role || exp.title, 'Start:', exp.startDate, 'End:', exp.endDate);
+
             const startDate = new Date(exp.startDate);
             const endDate = exp.endDate && exp.endDate.toLowerCase() !== 'present'
                 ? new Date(exp.endDate)
                 : new Date();
 
-            if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+            console.log('Parsed dates - Start:', startDate, 'End:', endDate);
+
+            if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime()) && endDate >= startDate) {
                 const months = (endDate.getFullYear() - startDate.getFullYear()) * 12
                     + (endDate.getMonth() - startDate.getMonth());
                 const validMonths = Math.max(0, months);
+
+                console.log('Calculated months:', validMonths);
 
                 // Keep track of the longest single experience
                 if (validMonths > longestMonths) {
                     longestMonths = validMonths;
                 }
+            } else {
+                console.log('Invalid dates detected');
             }
         });
 
+        console.log('Longest experience in months:', longestMonths);
         return longestMonths || profile?.experienceMonths || 6;
     };
 

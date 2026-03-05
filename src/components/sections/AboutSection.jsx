@@ -2,13 +2,13 @@ import { motion } from "framer-motion";
 import { FaBriefcase, FaCode, FaTrophy, FaGraduationCap } from "react-icons/fa";
 
 export default function AboutSection({ profile, stats }) {
-    // Calculate total experience from all experience entries
+    // Calculate longest single experience from all experience entries
     const calculateTotalExperience = () => {
         if (!stats.experience || stats.experience.length === 0) {
             return profile?.experienceMonths || 6;
         }
 
-        let totalMonths = 0;
+        let longestMonths = 0;
 
         stats.experience.forEach(exp => {
             const startDate = new Date(exp.startDate);
@@ -19,11 +19,16 @@ export default function AboutSection({ profile, stats }) {
             if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
                 const months = (endDate.getFullYear() - startDate.getFullYear()) * 12
                     + (endDate.getMonth() - startDate.getMonth());
-                totalMonths += Math.max(0, months);
+                const validMonths = Math.max(0, months);
+
+                // Keep track of the longest single experience
+                if (validMonths > longestMonths) {
+                    longestMonths = validMonths;
+                }
             }
         });
 
-        return totalMonths || profile?.experienceMonths || 6;
+        return longestMonths || profile?.experienceMonths || 6;
     };
 
     const totalMonths = calculateTotalExperience();
@@ -37,7 +42,7 @@ export default function AboutSection({ profile, stats }) {
         } else if (years > 0) {
             return `${years}+ Years`;
         } else {
-            return `${months}+ Months`;
+            return `${months}+`;
         }
     };
 
